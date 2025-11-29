@@ -3,7 +3,10 @@ import asyncio
 import logging
 import ujson as json
 from yarl import URL
-from .exceptions import ARIError, ResourceNotFound, InvalidState
+from .exceptions import (
+    ARIError, ResourceNotFound, InvalidState, ARIBadRequest, 
+    ARIAuthError, ARIForbidden, ARIUnprocessableEntity, ARIServerError
+)
 
 class ARITransport:
     def __init__(self, base_url, username, password, loop=None):
@@ -59,10 +62,20 @@ class ARITransport:
                     )
                     
                     # Pemetaan kesalahan spesifik ARI
-                    if response.status == 404:
-                        raise ResourceNotFound(f"Sumber daya tidak ditemukan: {endpoint}")
+                    if response.status == 400:
+                        raise ARIBadRequest(f"Permintaan tidak valid (400): {response_text}")
+                    elif response.status == 401:
+                        raise ARIAuthError(f"Gagal otentikasi (401): {response_text}")
+                    elif response.status == 403:
+                        raise ARIForbidden(f"Akses ditolak (403): {response_text}")
+                    elif response.status == 404:
+                        raise ResourceNotFound(f"Sumber daya tidak ditemukan (404): {endpoint}")
                     elif response.status == 409:
-                        raise InvalidState(f"Konflik keadaan sumber daya: {response_text}")
+                        raise InvalidState(f"Konflik keadaan sumber daya (409): {response_text}")
+                    elif response.status == 422:
+                        raise ARIUnprocessableEntity(f"Entitas tidak dapat diproses (422): {response_text}")
+                    elif response.status >= 500:
+                        raise ARIServerError(f"Kesalahan Server Asterisk ({response.status}): {response_text}")
                     else:
                         raise ARIError(f"Kesalahan ARI {response.status}: {response_text}")
 
