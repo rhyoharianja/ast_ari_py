@@ -6,8 +6,13 @@ A high-performance, asynchronous Python library for the Asterisk REST Interface 
 - **Async I/O**: Non-blocking architecture for handling thousands of concurrent calls.
 - **Resource Objects**: Pythonic abstractions for Channels, Bridges, Playbacks, and Recordings.
 - **User Management**: Logical management of Agents, Supervisors, and Roles.
-- **Advanced Call Control**: Call Groups, Trunking, Redirects, Snoop/Whisper.
-- **Event Driven**: Simple event loop integration.
+- **Advanced Telephony**: Support for Call Groups, Trunks, Whisper/Coaching, and IVR.
+
+## Documentation
+Full documentation is available in the **[GitHub Wiki](https://github.com/rhyoharianja/ast_ari_py/wiki)**.
+- [Installation Guide](https://github.com/rhyoharianja/ast_ari_py/wiki/Installation)
+- [Getting Started](https://github.com/rhyoharianja/ast_ari_py/wiki/Getting-Started)
+- [Call Handling & Control](https://github.com/rhyoharianja/ast_ari_py/wiki/Call-Handling)
 
 ## Installation
 ```bash
